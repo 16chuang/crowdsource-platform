@@ -250,9 +250,13 @@ class RRatingStudyViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     serializer_class = RequesterStudyTaskSerializer
 
     def list(self, request, *args, **kwargs):
-        phase = request.user.userprofile.requester.configuration.phase
-        models.RequesterStudyRels.objects.filter(requester=request.user.userprofile.requester,
-                                                 phase=phase).delete()
+        requester_id = int(request.query_params.get('r', -1))
+        phase = int(request.query_params.get('p', -1))
+        requester = models.Requester.objects.get(pk=requester_id)
+        # phase = requester.configuration.phase
+
+        # models.RequesterStudyRels.objects.filter(requester=request.user.userprofile.requester,
+        #                                          phase=phase).delete()
         if phase == 1:
             self.queryset = self.queryset.filter(original_id=1562)
         elif phase == 2:

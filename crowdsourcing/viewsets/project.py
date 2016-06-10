@@ -1,11 +1,11 @@
 import random
+
 from rest_framework import status, viewsets
 from rest_framework.decorators import detail_route, list_route
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
-from django.db.models import Q
 
-from crowdsourcing.models import Category, Project, Task, TaskWorker
+from crowdsourcing.models import Category, Project, Task
 from crowdsourcing.permissions.project import IsProjectOwnerOrCollaborator
 from crowdsourcing.serializers.project import *
 from crowdsourcing.serializers.task import *
@@ -45,7 +45,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.filter(deleted=False)
     serializer_class = ProjectSerializer
-    permission_classes = [IsProjectOwnerOrCollaborator, IsAuthenticated]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def create(self, request, *args, **kwargs):
         project_serializer = ProjectSerializer()
@@ -333,12 +333,12 @@ class ProjectViewSet(viewsets.ModelViewSet):
 
     @list_route(methods=['get'])
     def sample_workers(self, request, *args, **kwargs):
-        rated_workers = models.WorkerRequesterRating.objects.values('target__worker').\
+        rated_workers = models.WorkerRequesterRating.objects.values('target__worker'). \
             filter(origin=request.user.userprofile, origin_type='requester').values_list('target__worker', flat=True)
 
         filter_w = list(set(rated_workers) - set(request.user.userprofile.requester.configuration.seen_workers))
         rated_workers_sample = []
-        if len(filter_w)>=3:
+        if len(filter_w) >= 3:
             rated_workers_sample = np.random.choice(filter_w, 3, replace=False)
         else:
             rated_workers_sample = np.random.choice(rated_workers, 3, replace=False)
@@ -365,3 +365,26 @@ class ProjectViewSet(viewsets.ModelViewSet):
         models.FeedChoicesRequester.objects.create(requester=request.user.userprofile.requester, sample=sample,
                                                    worker_id=pick)
         return Response({'message': 'OK'}, status=status.HTTP_201_CREATED)
+
+    @list_route(methods=['get'], permission_classes=[IsAuthenticatedOrReadOnly])
+    def get_choice(self, request, *args, **kwargs):
+        requester_id = int(request.query_params.get('r', -1))
+
+        #[152, 153, 154, 168, 169, 171, 172, 174, 175, 176, 177, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 192, 193, 194, 195, 196, 200, 201, 202, 204, 205, 206, 207, 209, 212]
+
+        if requester_id not in [152, 153, 168, 169, 171, 172, 174, 175, 176, 177, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 192, 193, 194, 195, 196, 200, 201, 202, 204, 205, 206, 207, 209, 212]:
+            return Response({'message': 'Not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        phase = int(request.query_params.get('p', -1))
+
+        if requester_id > 0 and phase > 0:
+            choice = models.FeedChoicesRequester.objects \
+                .filter(requester__id=requester_id) \
+                .order_by('id')[phase-1]
+
+            w = models.Worker.objects.filter(id__in=choice.sample)
+            serializer = WorkerSerializer(instance=w, many=True, fields=('id', 'alias', 'profile', 'samples'),
+                                          context={'request': request, 'requester_id': requester_id, 'phase':phase})
+
+            return Response(data={"data": serializer.data, "round": phase}, status=status.HTTP_200_OK)
+        return Response({'message': 'Not found'}, status=status.HTTP_404_NOT_FOUND)

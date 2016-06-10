@@ -43,7 +43,8 @@
             sampleRequesters: sampleRequesters,
             sampleWorkers: sampleWorkers,
             postChoices: postChoices,
-            nextPhase: nextPhase
+            nextPhase: nextPhase,
+            getWorkerSampleChoice: getWorkerSampleChoice
         };
 
         return Project;
@@ -173,10 +174,15 @@
             return HttpService.doRequest(settings);
         }
 
-        function loadRequesterReputationStudy() {
+        function loadRequesterReputationStudy(requester_id, phase) {
             var settings = {
                 url: '/api/requester-study-rating/',
-                method: 'GET'
+                method: 'GET',
+                params:{
+                    r: requester_id,
+                    p: phase
+                }
+
             };
             return HttpService.doRequest(settings);
         }
@@ -238,6 +244,18 @@
                 method: 'POST',
                 data: {}
 
+            };
+            return HttpService.doRequest(settings);
+        }
+
+        function getWorkerSampleChoice(r, p) {
+            var settings = {
+                url: '/api/project/get_choice/',
+                method: 'GET',
+                params: {
+                    r: r,
+                    p: p
+                }
             };
             return HttpService.doRequest(settings);
         }

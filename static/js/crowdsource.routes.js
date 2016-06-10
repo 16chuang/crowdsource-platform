@@ -401,6 +401,16 @@
                 authenticate: true
             })
 
+            .state('task_analysis', {
+                url: '/task-analysis?r&p',
+                views: {
+                    // 'navbar': navbar,
+                    'content': feed_requesters,
+                    // 'chat': overlay
+                },
+                authenticate: false
+            })
+
             .state('home', {
                 url: '/home',
                 views: {

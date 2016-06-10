@@ -51,12 +51,26 @@
         };
         activate();
         function activate() {
+            if ($state.current.name == 'task_analysis') {
+                // getRequesterConfig();
+                var phase = $stateParams.p;
+                var requesterId = $stateParams.r;
+
+                // getRequesterConfig();
+                getWorkerSamples(requesterId, phase);
+                // getWorkerRatings();
+                loadRequesterReputationStudy(requesterId, phase);
+
+                return;
+            }
+
             if ($state.current.name == 'requester-study-r') {
                 getRequesterConfig();
                 getWorkerRatings();
                 loadRequesterReputationStudy();
                 return;
             }
+
             Project.listWorkerProjects().then(
                 function success(response) {
                     self.loading = false;
@@ -102,7 +116,7 @@
         }
 
         function loadRequesterReputationStudy(requester_id) {
-            Project.loadRequesterReputationStudy().then(
+            Project.loadRequesterReputationStudy(requester_id).then(
                 function success(response) {
                     self.tasks = response[0];
                     self.loading = false;
@@ -302,6 +316,25 @@
                 },
                 function error(errData) {
                     //$mdToast.showSimple('Please retry, something went wrong.');
+                }
+            ).finally(function () {
+            });
+        }
+
+        function getWorkerSamples(requesterId, phase){
+            Project.getWorkerSampleChoice(requesterId, phase).then(
+                function success(data) {
+                    self.sampled_workers = data[0].data;
+                    self.round = data[0].round;
+                    // self.pick = null;
+                    // self.round++;
+                    // sampleWorkers();
+                    self.loading = false;
+                    self.done = true;
+
+                },
+                function error(errData) {
+                    $mdToast.showSimple('Not found');
                 }
             ).finally(function () {
             });
