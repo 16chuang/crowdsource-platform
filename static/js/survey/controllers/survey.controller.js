@@ -24,12 +24,18 @@
         self.responses = [];
         self.pk = null;
         self.saveResponse = saveResponse;
+        self.secondStep = false;
+        self.next = next;
 
 
         activate();
 
         function activate() {
             retrieveQuestion();
+        }
+
+        function next() {
+            self.secondStep=true;
         }
 
         function retrieveQuestion() {
@@ -53,6 +59,7 @@
                     retrieveQuestion();
                     self.answer = null;
                     self.tweet = null;
+                    self.secondStep=false;
                 },
                 function error(errData) {
                     $mdToast.showSimple('Could not save response, please reload');

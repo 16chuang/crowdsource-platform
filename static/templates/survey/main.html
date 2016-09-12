@@ -3,7 +3,9 @@
         Please answer the following questions about Trumpify worker responses where they were asked to
         make a Hillary Clinton sound like Trump wrote it (in a funny way).
         <md-divider></md-divider>
-        <div>
+
+        <div ng-if="survey.secondStep" style="padding-top: 16px">
+            Given the following tweets and worker responses:
             <div>
                 <span class="_user-alias">{{ 'worker one' }}</span>
             </div>
@@ -18,26 +20,32 @@
                 <div>Original Tweet: {{ survey.responses.result_two.tweet }}</div>
                 <div>Worker Response: {{ survey.responses.result_two.result }}</div>
             </div>
+            <div style="padding-top: 24px">
+                <span style="font-size: medium; font-weight: 500">Which response do you think is funnier?</span>
+                <md-radio-group ng-model="survey.answer">
+                    <md-radio-button aria-label="w1" value="{{ survey.responses.result_one.task_worker_id }}">Worker One
+                    </md-radio-button>
+                    <md-radio-button aria-label="w2" value="{{ survey.responses.result_two.task_worker_id }}"> Worker Two
+                    </md-radio-button>
+                </md-radio-group>
+            </div>
+        </div>
 
-        </div>
-        <div style="padding-top: 24px">
-            <span style="font-size: medium; font-weight: 500">Q1: Which response do you think is funnier?</span>
-            <md-radio-group ng-model="survey.answer">
-                <md-radio-button value="{{ survey.responses.result_one.task_worker_id }}">Worker One</md-radio-button>
-                <md-radio-button value="{{ survey.responses.result_two.task_worker_id }}"> Worker Two</md-radio-button>
-            </md-radio-group>
-        </div>
-        <div style="padding-top: 24px">
-            <span style="font-size: medium; font-weight: 500">Q2: Which tweet do you think could generate a funnier response?</span>
+
+        <div ng-if="!survey.secondStep" style="padding-top: 24px">
+            <span style="font-size: medium; font-weight: 500">Which tweet do you think could generate a funnier response?</span>
             <md-radio-group ng-model="survey.tweet">
-                <md-radio-button value="{{ survey.responses.result_one.task_worker_id }}">{{ survey.responses.result_one.tweet }}</md-radio-button>
-                <md-radio-button value="{{ survey.responses.result_two.task_worker_id }}">{{ survey.responses.result_two.tweet }}</md-radio-button>
+                <md-radio-button aria-label="w1" value="{{ survey.responses.result_one.task_worker_id }}">{{ survey.responses.result_one.tweet }}</md-radio-button>
+                <md-radio-button aria-label="w2" value="{{ survey.responses.result_two.task_worker_id }}">{{ survey.responses.result_two.tweet }}</md-radio-button>
             </md-radio-group>
         </div>
 
         <div>
-            <md-button ng-click="survey.saveResponse()">
+            <md-button ng-if="!survey.secondStep" ng-click="survey.next()">
                 Next
+            </md-button>
+            <md-button ng-if="survey.secondStep" ng-click="survey.saveResponse()">
+                Submit
             </md-button>
         </div>
     </div>
