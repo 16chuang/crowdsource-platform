@@ -1,0 +1,44 @@
+<div class="_main-content _middle-content" ng-class="{'_sm': $mdMedia('sm'), '_gt-sm': $mdMedia('gt-sm')}">
+    <div class="_feed-list">
+        Please answer the following questions about Trumpify worker responses where they were asked to
+        make a Hillary Clinton sound like Trump wrote it (in a funny way).
+        <md-divider></md-divider>
+        <div>
+            <div>
+                <span class="_user-alias">{{ 'worker one' }}</span>
+            </div>
+
+            <div>Original Tweet 1: {{ survey.responses.result_one.tweet }}</div>
+            <div>Response 1: {{ survey.responses.result_one.result }}</div>
+
+            <div style="padding-top: 8px">
+                <div>
+                    <span class="_user-alias">{{ 'worker two' }}</span>
+                </div>
+                <div>Original Tweet 2: {{ survey.responses.result_two.tweet }}</div>
+                <div>Response 2: {{ survey.responses.result_two.result }}</div>
+            </div>
+
+        </div>
+        <div style="padding-top: 24px">
+            <span style="font-size: medium; font-weight: 500">Q1: Which response do you think is funnier?</span>
+            <md-radio-group ng-model="survey.answer">
+                <md-radio-button value="{{ survey.responses.result_one.task_worker_id }}">Worker One</md-radio-button>
+                <md-radio-button value="{{ survey.responses.result_two.task_worker_id }}"> Worker Two</md-radio-button>
+            </md-radio-group>
+        </div>
+        <div style="padding-top: 24px">
+            <span style="font-size: medium; font-weight: 500">Q2: Which tweet do you think could generate a funnier response?</span>
+            <md-radio-group ng-model="survey.tweet">
+                <md-radio-button value="{{ survey.responses.result_one.task_worker_id }}">Tweet One</md-radio-button>
+                <md-radio-button value="{{ survey.responses.result_two.task_worker_id }}">Tweet Two</md-radio-button>
+            </md-radio-group>
+        </div>
+
+        <div>
+            <md-button ng-click="survey.saveResponse()">
+                Next
+            </md-button>
+        </div>
+    </div>
+</div>

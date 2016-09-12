@@ -31,7 +31,8 @@ angular
         'crowdsource.template',
         'crowdsource.user',
         'crowdsource.helpers',
-        'crowdsource.message'
+        'crowdsource.message',
+        'crowdsource.survey'
     ]);
 
 angular

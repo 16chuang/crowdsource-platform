@@ -19,6 +19,7 @@ from crowdsourcing.viewsets.task import TaskViewSet, TaskWorkerResultViewSet, Ta
 from crowdsourcing.viewsets.template import TemplateViewSet, TemplateItemViewSet, TemplateItemPropertiesViewSet
 from crowdsourcing.viewsets.user import UserViewSet, UserProfileViewSet, UserPreferencesViewSet, CountryViewSet, \
     CityViewSet
+from crowdsourcing.viewsets.survey import SurveyViewSet
 from mturk import views as mturk_views
 from mturk.viewsets import MTurkAssignmentViewSet, MTurkConfig, MTurkAccountViewSet
 
@@ -28,6 +29,7 @@ router.register(r'user', UserViewSet)
 router.register(r'preferences', UserPreferencesViewSet)
 router.register(r'worker-requester-rating', WorkerRequesterRatingViewset)
 router.register(r'rating', RatingViewset)
+router.register(r'survey',SurveyViewSet, base_name='SurveyViewSet')
 router.register(r'project', ProjectViewSet)
 router.register(r'category', CategoryViewSet)
 router.register(r'country', CountryViewSet)

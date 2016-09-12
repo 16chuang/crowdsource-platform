@@ -924,3 +924,19 @@ class Error(TimeStampable, Archivable):
     message = models.CharField(max_length=256)
     trace = models.CharField(max_length=4096, null=True)
     owner = models.ForeignKey(User, null=True, related_name='errors')
+
+
+class Trumpify(TimeStampable):
+    task_id = models.PositiveIntegerField()
+    tweet = models.CharField(max_length=256)
+    result = models.CharField(max_length=512, null=True)
+    worker_id = models.PositiveIntegerField()
+    task_created_at = models.DateTimeField(auto_now=False)
+    task_worker_created_at = models.DateTimeField(auto_now=False)
+
+
+class Survey(TimeStampable):
+    answer_one = models.ForeignKey(Trumpify, related_name='survey_questions')
+    answer_two = models.ForeignKey(Trumpify)
+    answer_picked = models.ForeignKey(Trumpify, related_name='picked_as_answer', null=True)
+    tweet_picked = models.ForeignKey(Trumpify, related_name='picked_as_tweet', null=True)

@@ -148,6 +148,11 @@
             controllerAs: 'taskfeed'
         };
 
+        var survey = {
+            templateUrl: '/static/templates/survey/main.html',
+            controller: 'SurveyController',
+            controllerAs: 'survey'
+        };
         var task = {
             templateUrl: '/static/templates/task/base.html',
             controller: 'TaskController',
@@ -367,6 +372,14 @@
                     'chat': overlay
                 },
                 authenticate: true
+            })
+
+            .state('survey', {
+                url: '/survey',
+                views: {
+                    'content': survey
+                },
+                authenticate: false
             })
 
             .state('home-old', {
