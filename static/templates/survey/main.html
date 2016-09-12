@@ -8,15 +8,15 @@
                 <span class="_user-alias">{{ 'worker one' }}</span>
             </div>
 
-            <div>Original Tweet 1: {{ survey.responses.result_one.tweet }}</div>
-            <div>Response 1: {{ survey.responses.result_one.result }}</div>
+            <div>Original Tweet: {{ survey.responses.result_one.tweet }}</div>
+            <div>Worker Response: {{ survey.responses.result_one.result }}</div>
 
             <div style="padding-top: 8px">
                 <div>
                     <span class="_user-alias">{{ 'worker two' }}</span>
                 </div>
-                <div>Original Tweet 2: {{ survey.responses.result_two.tweet }}</div>
-                <div>Response 2: {{ survey.responses.result_two.result }}</div>
+                <div>Original Tweet: {{ survey.responses.result_two.tweet }}</div>
+                <div>Worker Response: {{ survey.responses.result_two.result }}</div>
             </div>
 
         </div>
@@ -30,8 +30,8 @@
         <div style="padding-top: 24px">
             <span style="font-size: medium; font-weight: 500">Q2: Which tweet do you think could generate a funnier response?</span>
             <md-radio-group ng-model="survey.tweet">
-                <md-radio-button value="{{ survey.responses.result_one.task_worker_id }}">Tweet One</md-radio-button>
-                <md-radio-button value="{{ survey.responses.result_two.task_worker_id }}">Tweet Two</md-radio-button>
+                <md-radio-button value="{{ survey.responses.result_one.task_worker_id }}">{{ survey.responses.result_one.tweet }}</md-radio-button>
+                <md-radio-button value="{{ survey.responses.result_two.task_worker_id }}">{{ survey.responses.result_two.tweet }}</md-radio-button>
             </md-radio-group>
         </div>
 
